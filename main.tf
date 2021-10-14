@@ -13,6 +13,16 @@ provider "aws" {
   region  = "us-east-1"
 }
 
+resource "aws_s3_bucket" "test-app-bucket" {
+  bucket = "s3-website-test.jon-richmond-test-app.com"
+  acl    = "public-read"
+  policy = file("policy.json")
+  website {
+    index_document = "index.html"
+    error_document = "error.html"
+  }
+}
+
 resource "aws_instance" "app_server" {
   ami           = "ami-02e136e904f3da870"
   instance_type = "t2.micro"
