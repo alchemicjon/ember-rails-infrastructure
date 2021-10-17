@@ -1,4 +1,10 @@
 terraform {
+  backend "remote" {
+    organization = "jon-richmond"
+    workspaces {
+      name = "ember-rails-infrastructure"
+    }
+  }
   required_providers {
     aws = {
       source  = "hashicorp/aws"
