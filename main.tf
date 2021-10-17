@@ -19,6 +19,10 @@ provider "aws" {
   region  = "us-east-1"
 }
 
+resource "aws_route53_zone" "primary" {
+  name = "motwbuddy.com"
+}
+
 resource "aws_s3_bucket" "test-app-bucket" {
   bucket = "s3-website-test.jon-richmond-test-app.com"
   acl    = "public-read"
