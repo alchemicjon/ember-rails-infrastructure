@@ -35,7 +35,7 @@ resource "aws_route53_zone" "primary" {
 
 resource "aws_s3_bucket" "log-bucket" {
   bucket = "logs.${var.domain_name}"
-  acl = "log-delivery-write"
+  acl    = "log-delivery-write"
 }
 
 resource "aws_s3_bucket" "primary-app-bucket" {
