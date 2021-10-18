@@ -19,17 +19,34 @@ provider "aws" {
   region  = "us-east-1"
 }
 
-resource "aws_route53_zone" "primary" {
-  name = "motwbuddy.com"
+resource "aws_acm_certificate" "cert" {
+  domain_name               = var.domain_name
+  validation_method         = "DNS"
+  subject_alternative_names = ["*.${var.domain_name}", "www.${var.domain_name}", "www.${var.domain_name}", "api.${var.domain_name}"]
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
-resource "aws_s3_bucket" "test-app-bucket" {
-  bucket = "s3-website-test.jon-richmond-test-app.com"
+resource "aws_route53_zone" "primary" {
+  name = var.domain_name
+}
+
+resource "aws_s3_bucket" "primary-app-bucket" {
+  bucket = var.domain_name
   acl    = "public-read"
-  policy = file("policy.json")
   website {
     index_document = "index.html"
-    error_document = "error.html"
+    error_document = "index.html"
+  }
+}
+
+resource "aws_s3_bucket" "secondary-app-bucket" {
+  bucket = "www.${var.domain_name}"
+  acl    = "log-delivery-write"
+  website {
+    redirect_all_requests_to = var.domain_name
   }
 }
 
